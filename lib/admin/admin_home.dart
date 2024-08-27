@@ -15,7 +15,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    PizzaFormPage(),
+    const AddPizzaPage(),
     const FavoritesPage(),
     const SettingsPage(),
   ];
@@ -35,12 +35,12 @@ class _AdminHomePageState extends State<AdminHomePage> {
         onTap: _onItemTapped,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+            icon: Icon(Icons.local_pizza_rounded),
+            label: 'Add Pizza',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Menu',
+            icon: Icon(Icons.list_alt_rounded),
+            label: 'View Foods',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),

@@ -1,37 +1,25 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:pizza_delivery_app/user/pizza_detail_page.dart';
 
 class MenuScreen extends StatelessWidget {
   MenuScreen({super.key});
 
-  final List<Map<String, dynamic>> pizzas = [
-    {
-      'name': 'Spinach Delight',
-      'price': 90.00,
-      'image': 'assets/pizza_0.png',
-      'description': 'Pizza magic: create, bake, savor perfection!',
-      'isSpicy': true,
-      'isNonVeg': false,
-      'originalPrice': 95.00,
-    },
-    {
-      'name': 'Cheesy Marvel',
-      'price': 70.00,
-      'image': 'assets/pizza_1.png',
-      'description': 'Crafting joy: your rules, best taste!',
-      'isSpicy': false,
-      'isNonVeg': false,
-      'originalPrice': 80.00,
-    },
-    {
-      'name': 'Pepperoni Bliss',
-      'price': 60.00,
-      'image': 'assets/pizza_2.png',
-      'description': 'Unleash flavor: build your dream pizza!',
-      'isSpicy': false,
-      'isNonVeg': true,
-      'originalPrice': 70.00,
-    },
-  ];
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  Future<List<Map<String, dynamic>>> fetchPizzas() async {
+    QuerySnapshot querySnapshot = await firestore.collection('pizzas').get();
+    return querySnapshot.docs.map((doc) {
+      return {
+        'name': doc['name'],
+        'price': doc['price'],
+        'imageUrl': doc['imageUrl'], // Updated to use imageUrl from Firestore
+        'description': doc['description'],
+        'isSpicy': doc['badge'] == 'spicy',
+        'isNonVeg': doc['badge'] == 'non-veg',
+      };
+    }).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,90 +28,121 @@ class MenuScreen extends StatelessWidget {
         title: const Text('Pizza Menu'),
         centerTitle: true,
       ),
-      body: GridView.builder(
-        padding: const EdgeInsets.all(8.0),
-        itemCount: pizzas.length,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 8.0,
-          mainAxisSpacing: 8.0,
-          childAspectRatio: 2 / 3, // Adjust this ratio if needed
-        ),
-        itemBuilder: (context, index) {
-          return Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: SingleChildScrollView(
-              // Added SingleChildScrollView
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Pizza Image
-                  Image.asset(
-                    pizzas[index]['image'],
-                    height: 120,
-                    width: double.infinity,
-                    //fit: BoxFit.contain,
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: fetchPizzas(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return const Center(child: Text('Error loading pizzas'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('No pizzas available'));
+          } else {
+            final pizzas = snapshot.data!;
+            return GridView.builder(
+              padding: const EdgeInsets.all(8.0),
+              itemCount: pizzas.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 8.0,
+                mainAxisSpacing: 8.0,
+                childAspectRatio: 2 / 3,
+              ),
+              itemBuilder: (context, index) {
+                return Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Row with Badges
-                        Row(
-                          children: [
-                            if (pizzas[index]['isNonVeg'])
-                              Badge(label: 'Non-Veg', color: Colors.red),
-                            if (pizzas[index]['isSpicy'])
-                              Badge(label: 'Spicy', color: Colors.orange),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        // Pizza Name
-                        Text(
-                          pizzas[index]['name'],
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PizzaDetailsPage(
+                            pizzaName: pizzas[index]['name'],
+                            description: pizzas[index]['description'],
+                            imageUrl: pizzas[index]['imageUrl'],
+                            price: pizzas[index]['price'],
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 4),
-                        // Pizza Description
-                        Text(
-                          pizzas[index]['description'],
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey[600],
+                      );
+                    },
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Pizza Image
+                          Image.network(
+                            pizzas[index]['imageUrl'],
+                            height: 120,
+                            width: double.infinity,
+                            //fit: BoxFit.cover,
                           ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 8),
-                        // Row with Price
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              '\$${pizzas[index]['price'].toStringAsFixed(2)}',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.blue,
-                              ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Row with Badges
+                                Row(
+                                  children: [
+                                    if (pizzas[index]['isNonVeg'])
+                                      Badge(
+                                          label: 'Non-Veg', color: Colors.red),
+                                    if (pizzas[index]['isSpicy'])
+                                      Badge(
+                                          label: 'Spicy', color: Colors.orange),
+                                  ],
+                                ),
+                                const SizedBox(height: 4),
+                                // Pizza Name
+                                Text(
+                                  pizzas[index]['name'],
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 4),
+                                // Pizza Description
+                                Text(
+                                  pizzas[index]['description'],
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey[600],
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 8),
+                                // Row with Price
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      '\$${pizzas[index]['price'].toStringAsFixed(2)}',
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.blue,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ],
-              ),
-            ),
-          );
+                );
+              },
+            );
+          }
         },
       ),
     );

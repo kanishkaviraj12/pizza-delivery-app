@@ -4,14 +4,14 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class PizzaFormPage extends StatefulWidget {
-  const PizzaFormPage({super.key});
+class AddPizzaPage extends StatefulWidget {
+  const AddPizzaPage({super.key});
 
   @override
-  _PizzaFormPageState createState() => _PizzaFormPageState();
+  _AddPizzaPageState createState() => _AddPizzaPageState();
 }
 
-class _PizzaFormPageState extends State<PizzaFormPage> {
+class _AddPizzaPageState extends State<AddPizzaPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
