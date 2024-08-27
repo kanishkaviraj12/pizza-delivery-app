@@ -15,7 +15,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    const AddPizza(),
+    PizzaFormPage(),
     const FavoritesPage(),
     const SettingsPage(),
   ];
