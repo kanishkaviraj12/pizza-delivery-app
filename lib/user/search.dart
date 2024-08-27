@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:pizza_delivery_app/user/pizza_detail_page.dart';
 
 class SearchFilterScreen extends StatefulWidget {
+  const SearchFilterScreen({super.key});
+
   @override
   _SearchFilterScreenState createState() => _SearchFilterScreenState();
 }
@@ -8,25 +12,35 @@ class SearchFilterScreen extends StatefulWidget {
 class _SearchFilterScreenState extends State<SearchFilterScreen> {
   String searchQuery = '';
   String selectedCategory = 'All';
-  final List<Map<String, dynamic>> pizzas = [
-    {'name': 'Pepperoni Pizza', 'category': 'Non-Veg', 'price': 9.99},
-    {'name': 'Margherita Pizza', 'category': 'Veg', 'price': 8.99},
-    {'name': 'BBQ Chicken Pizza', 'category': 'Non-Veg', 'price': 10.99},
-  ];
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  Future<List<Map<String, dynamic>>> fetchPizzas() async {
+    QuerySnapshot querySnapshot = await firestore.collection('pizzas').get();
+    return querySnapshot.docs.map((doc) {
+      return {
+        'name': doc['name'],
+        'price': doc['price'],
+        'imageUrl': doc['imageUrl'],
+        'description': doc['description'],
+        'isSpicy': doc['badge'] == 'spicy',
+        'isNonVeg': doc['badge'] == 'non-veg',
+      };
+    }).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Search & Filter'),
+        title: const Text('Search & Filter'),
         centerTitle: true,
       ),
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Search',
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.search),
@@ -39,7 +53,7 @@ class _SearchFilterScreenState extends State<SearchFilterScreen> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: DropdownButtonFormField(
               value: selectedCategory,
               items: ['All', 'Veg', 'Non-Veg'].map((String category) {
@@ -50,34 +64,119 @@ class _SearchFilterScreenState extends State<SearchFilterScreen> {
                   selectedCategory = value.toString();
                 });
               },
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Filter by Category',
-                border: OutlineInputBorder(),
+                border: InputBorder.none,
               ),
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: pizzas.length,
-              itemBuilder: (context, index) {
-                if ((searchQuery.isEmpty ||
-                        pizzas[index]['name']
-                            .toLowerCase()
-                            .contains(searchQuery.toLowerCase())) &&
-                    (selectedCategory == 'All' ||
-                        pizzas[index]['category'] == selectedCategory)) {
-                  return ListTile(
-                    title: Text(pizzas[index]['name']),
-                    subtitle: Text(pizzas[index]['category']),
-                    trailing: Text('\$${pizzas[index]['price']}'),
-                  );
+            child: FutureBuilder<List<Map<String, dynamic>>>(
+              future: fetchPizzas(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return const Center(child: Text('Error loading pizzas'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(child: Text('No pizzas available'));
                 } else {
-                  return Container();
+                  final pizzas = snapshot.data!;
+                  return ListView.builder(
+                    itemCount: pizzas.length,
+                    itemBuilder: (context, index) {
+                      if ((searchQuery.isEmpty ||
+                              pizzas[index]['name']
+                                  .toLowerCase()
+                                  .contains(searchQuery.toLowerCase())) &&
+                          (selectedCategory == 'All' ||
+                              (selectedCategory == 'Veg' &&
+                                  !pizzas[index]['isNonVeg']) ||
+                              (selectedCategory == 'Non-Veg' &&
+                                  pizzas[index]['isNonVeg']))) {
+                        return ListTile(
+                          leading: Image.network(
+                            pizzas[index]['imageUrl'],
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                          ),
+                          title: Text(pizzas[index]['name']),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  if (pizzas[index]['isNonVeg'])
+                                    Badge(label: 'Non-Veg', color: Colors.red),
+                                  if (pizzas[index]['isSpicy'])
+                                    Badge(label: 'Spicy', color: Colors.orange),
+                                ],
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                pizzas[index]['description'],
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey[600],
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
+                          trailing: Text('\$${pizzas[index]['price']}'),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PizzaDetailsPage(
+                                  pizzaName: pizzas[index]['name'],
+                                  description: pizzas[index]['description'],
+                                  imageUrl: pizzas[index]['imageUrl'],
+                                  price: pizzas[index]['price'],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      } else {
+                        return Container();
+                      }
+                    },
+                  );
                 }
               },
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// Badge Widget
+class Badge extends StatelessWidget {
+  final String label;
+  final Color color;
+
+  Badge({required this.label, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(right: 4.0),
+      padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(12.0),
+      ),
+      child: Text(
+        label,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 10,
+        ),
       ),
     );
   }

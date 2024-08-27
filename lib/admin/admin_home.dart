@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pizza_delivery_app/admin/add_pizza.dart';
-import 'package:pizza_delivery_app/user/favoriate_page.dart';
+import 'package:pizza_delivery_app/admin/view_pizza.dart';
 import 'package:pizza_delivery_app/user/menu_screen.dart';
 import 'package:pizza_delivery_app/user/setting_page.dart';
 
@@ -16,7 +16,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
 
   final List<Widget> _pages = [
     const AddPizzaPage(),
-    const FavoritesPage(),
+    ViewPizzaPage(),
     const SettingsPage(),
   ];
 
