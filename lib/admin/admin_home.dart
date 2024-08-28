@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pizza_delivery_app/admin/add_pizza.dart';
 import 'package:pizza_delivery_app/admin/view_pizza.dart';
+import 'package:pizza_delivery_app/order_management/order_approve.dart';
 import 'package:pizza_delivery_app/user/menu_screen.dart';
 import 'package:pizza_delivery_app/user/account_info.dart';
 
@@ -17,6 +18,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
   final List<Widget> _pages = [
     const AddPizzaPage(),
     ViewPizzaPage(),
+    OrderApprovePage(),
     AccountInfoPage(),
   ];
 
@@ -33,6 +35,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
+        selectedItemColor: Colors.blue, // Color for selected item
+        unselectedItemColor: Colors.grey, // Color for unselected items
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.local_pizza_rounded),
@@ -41,6 +45,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.list_alt_rounded),
             label: 'View Foods',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Order Edit',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

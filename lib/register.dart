@@ -164,7 +164,7 @@ class _RegisterPageState extends State<RegisterPage> {
         // Save additional user data to Firestore
         await _firestore.collection('users').doc(userCredential.user!.uid).set({
           'name': _name,
-          'email': _email,
+          'userEmail': _email,
           'hashedPassword': hashedPassword,
           'mobile': _mobileNumber,
           'address': _address,

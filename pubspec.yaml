@@ -71,6 +71,7 @@ flutter:
     - assets/pizza_0.png
     - assets/pizza_1.png
     - assets/pizza_2.png
+    - assets/pizza_logo.png
     - assets/profile_pic/
 
   # An image asset can refer to one or more resolution-specific "variants", see

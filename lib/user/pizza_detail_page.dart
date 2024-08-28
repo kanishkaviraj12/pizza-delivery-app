@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // Import Firebase Auth
+import 'package:pizza_delivery_app/order_management/order_summary.dart';
 
 class PizzaDetailsPage extends StatefulWidget {
   final String pizzaName;
@@ -67,10 +69,11 @@ class _PizzaDetailsPageState extends State<PizzaDetailsPage>
 
   @override
   Widget build(BuildContext context) {
+    final String? userEmail = FirebaseAuth.instance.currentUser?.email;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.pizzaName),
-        //backgroundColor: Colors.grey,
         elevation: 0,
       ),
       body: Stack(
@@ -252,8 +255,23 @@ class _PizzaDetailsPageState extends State<PizzaDetailsPage>
                   // Buy Button
                   Center(
                     child: ElevatedButton(
+                      // Replace the onPressed method of the ElevatedButton
                       onPressed: () {
-                        // Handle buy action
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => OrderSummaryPage(
+                              pizzaName: widget.pizzaName,
+                              description: widget.description,
+                              imageUrl: widget.imageUrl,
+                              price: widget.price,
+                              quantity: _quantity,
+                              selectedSize: _selectedSize,
+                              userEmail:
+                                  userEmail ?? '', // Pass the user's email
+                            ),
+                          ),
+                        );
                       },
                       child: Text('Buy Now'),
                       style: ElevatedButton.styleFrom(

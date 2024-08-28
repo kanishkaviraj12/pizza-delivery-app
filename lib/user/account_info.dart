@@ -65,7 +65,7 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
 
           final data = snapshot.data!.data() as Map<String, dynamic>;
           final name = data['name'] ?? 'No name';
-          final email = data['email'] ?? 'No email';
+          final email = data['userEmail'] ?? 'No email';
           final mobile = data['mobile'] ?? 'No mobile number';
           final address = data['address'] ?? 'No address';
           final profileImage =
