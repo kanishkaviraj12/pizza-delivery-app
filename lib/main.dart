@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:pizza_delivery_app/admin/add_pizza.dart';
 import 'package:pizza_delivery_app/admin/admin_home.dart';
 import 'package:pizza_delivery_app/firebase_options.dart';
+import 'package:pizza_delivery_app/login.dart';
+import 'package:pizza_delivery_app/register.dart';
 import 'package:pizza_delivery_app/user/menu_screen.dart';
 import 'package:pizza_delivery_app/user/pizza_detail_page.dart';
 import 'package:pizza_delivery_app/user/user_home.dart';
@@ -25,7 +27,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.orange,
       ),
       home: //dminHomePage(),
-          UserHomePage(),
+          //UserHomePage(),
+          //RegisterPage(),
+          LoginPage(),
     );
   }
 }
