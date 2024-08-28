@@ -207,12 +207,52 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     const SizedBox(height: 16),
                     TextButton(
-                      onPressed: () {
-                        // Implement forgot password functionality
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text('Forgot password clicked')),
-                        );
+                      onPressed: () async {
+                        String email = _emailController.text.trim();
+
+                        if (email.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text(
+                                    'Please enter your email to reset password')),
+                          );
+                          return;
+                        }
+
+                        try {
+                          await FirebaseAuth.instance
+                              .sendPasswordResetEmail(email: email);
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('Password reset email sent!')),
+                          );
+                        } on FirebaseAuthException catch (e) {
+                          String message;
+                          switch (e.code) {
+                            case 'invalid-email':
+                              message = 'The email address is badly formatted.';
+                              break;
+                            case 'user-not-found':
+                              message = 'No user found for that email.';
+                              break;
+                            default:
+                              message = 'An error occurred: ${e.message}';
+                              break;
+                          }
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(message)),
+                          );
+                        } catch (e) {
+                          // Log unexpected exceptions
+                          print('Unexpected exception caught: $e');
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('An unexpected error occurred.')),
+                          );
+                        }
                       },
                       child: const Text('Forgot Password?'),
                     ),
