@@ -5,18 +5,21 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
 
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
+  String _name = '';
   String _email = '';
   String _password = '';
   String _mobileNumber = '';
   String _address = '';
   String _selectedImage = 'dp_3.png'; // Initial default image
-  List<String> _imageOptions = [
+  final List<String> _imageOptions = [
     'dp_1.png',
     'dp_2.png',
     'dp_3.png',
@@ -25,7 +28,7 @@ class _RegisterPageState extends State<RegisterPage> {
     'dp_6.png'
   ];
   int _currentImageIndex = 0;
-  String _userType = 'user'; // Default user type
+  final String _userType = 'user'; // Default user type
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -34,7 +37,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('User Registration'),
+        title: const Text('User Registration'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -43,9 +46,20 @@ class _RegisterPageState extends State<RegisterPage> {
           child: ListView(
             children: [
               _buildProfileImageSelector(),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Email'),
+                decoration: const InputDecoration(labelText: 'Name'),
+                keyboardType: TextInputType.emailAddress,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your name';
+                  }
+                  return null;
+                },
+                onSaved: (value) => _name = value!,
+              ),
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'Email'),
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -56,7 +70,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 onSaved: (value) => _email = value!,
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Password'),
+                decoration: const InputDecoration(labelText: 'Password'),
                 obscureText: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -67,7 +81,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 onSaved: (value) => _password = value!,
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Mobile Number'),
+                decoration: const InputDecoration(labelText: 'Mobile Number'),
                 keyboardType: TextInputType.phone,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -78,7 +92,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 onSaved: (value) => _mobileNumber = value!,
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Address'),
+                decoration: const InputDecoration(labelText: 'Address'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your address';
@@ -87,10 +101,19 @@ class _RegisterPageState extends State<RegisterPage> {
                 },
                 onSaved: (value) => _address = value!,
               ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _submitForm,
-                child: Text('Register'),
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.only(left: 25, right: 25),
+                child: ElevatedButton(
+                  onPressed: _submitForm,
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.lightBlue,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 100, vertical: 15),
+                      textStyle: const TextStyle(fontSize: 18),
+                      foregroundColor: Colors.white),
+                  child: const Text('Register'),
+                ),
               ),
             ],
           ),
@@ -115,8 +138,8 @@ class _RegisterPageState extends State<RegisterPage> {
             radius: 100,
           ),
         ),
-        SizedBox(height: 10),
-        Text(
+        const SizedBox(height: 10),
+        const Text(
           'Tap to change image',
           style: TextStyle(fontSize: 16, color: Colors.grey),
         ),
@@ -140,6 +163,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
         // Save additional user data to Firestore
         await _firestore.collection('users').doc(userCredential.user!.uid).set({
+          'name': _name,
           'email': _email,
           'hashedPassword': hashedPassword,
           'mobile': _mobileNumber,
@@ -149,7 +173,7 @@ class _RegisterPageState extends State<RegisterPage> {
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('User registered successfully!')),
+          const SnackBar(content: Text('User registered successfully!')),
         );
       } on FirebaseAuthException catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(

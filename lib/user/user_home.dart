@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pizza_delivery_app/admin/view_pizza.dart';
 import 'package:pizza_delivery_app/user/menu_screen.dart';
 import 'package:pizza_delivery_app/user/search.dart';
-import 'package:pizza_delivery_app/user/setting_page.dart';
+import 'package:pizza_delivery_app/user/account_info.dart';
 
 class UserHomePage extends StatefulWidget {
   const UserHomePage({super.key});
@@ -17,7 +17,7 @@ class _UserHomePageState extends State<UserHomePage> {
   final List<Widget> _pages = [
     MenuScreen(),
     SearchFilterScreen(),
-    const SettingsPage(),
+    AccountInfoPage(),
   ];
 
   void _onItemTapped(int index) {

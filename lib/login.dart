@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pizza_delivery_app/admin/admin_home.dart';
-import 'package:pizza_delivery_app/user/user_home.dart'; // Make sure to import the user home page
+import 'package:pizza_delivery_app/register.dart';
+import 'package:pizza_delivery_app/user/user_home.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -203,6 +204,12 @@ class _LoginPageState extends State<LoginPage> {
                     else
                       ElevatedButton(
                         onPressed: _login,
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.lightBlue,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 100, vertical: 15),
+                            textStyle: const TextStyle(fontSize: 18),
+                            foregroundColor: Colors.white),
                         child: const Text('Login'),
                       ),
                     const SizedBox(height: 16),
@@ -255,6 +262,17 @@ class _LoginPageState extends State<LoginPage> {
                         }
                       },
                       child: const Text('Forgot Password?'),
+                    ),
+                    const SizedBox(height: 1),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => RegisterPage()),
+                        );
+                      },
+                      child: const Text('Don\'t have an account? Register'),
                     ),
                   ],
                 ),

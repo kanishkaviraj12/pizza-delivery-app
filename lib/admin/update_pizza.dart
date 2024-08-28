@@ -139,20 +139,37 @@ class _UpdatePizzaPageState extends State<UpdatePizzaPage> {
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: _pickImage,
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.lightGreen,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 75, vertical: 15),
+                  textStyle: const TextStyle(fontSize: 18),
+                  foregroundColor: Colors.white),
               child: Text('Pick Image'),
             ),
             SizedBox(height: 16),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ElevatedButton(
                   onPressed: _updatePizza,
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.lightBlue,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 75, vertical: 15),
+                      textStyle: const TextStyle(fontSize: 18),
+                      foregroundColor: Colors.white),
                   child: Text('Update'),
                 ),
                 ElevatedButton(
                   onPressed: _deletePizza,
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 50, vertical: 15),
+                      textStyle: const TextStyle(fontSize: 18),
+                      foregroundColor: Colors.white),
                   child: Text('Delete'),
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                 ),
               ],
             ),
