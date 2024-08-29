@@ -21,14 +21,13 @@ class _OrderApprovePageState extends State<OrderApprovePage> {
 
   Future<void> _updateOrderStatus(String orderId, String status) async {
     try {
-      print(
-          'Attempting to update order status for $orderId to $status'); // Debug log
+      print('Attempting to update order status for $orderId to $status');
       await _firestore.collection('orders').doc(orderId).update({
         'status': status,
       });
-      print('Order status updated successfully'); // Debug log
+      print('Order status updated successfully');
     } catch (e) {
-      print('Error updating order status: $e'); // Debug log
+      print('Error updating order status: $e');
     }
   }
 
@@ -36,35 +35,51 @@ class _OrderApprovePageState extends State<OrderApprovePage> {
     try {
       QuerySnapshot querySnapshot = await _firestore
           .collection('users')
-          .where('userEmail',
-              isEqualTo: userEmail) // Ensure the field name matches
+          .where('userEmail', isEqualTo: userEmail)
           .limit(1)
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
         DocumentSnapshot userDoc = querySnapshot.docs.first;
-        print('User document exists'); // Debug log
-        print('User data: ${userDoc.data()}'); // Debug log
+        print('User document exists');
+        print('User data: ${userDoc.data()}');
         return userDoc.data() as Map<String, dynamic>;
       } else {
-        print('User document does not exist'); // Debug log
-        return {}; // Return an empty map if user is not found
+        print('User document does not exist');
+        return {};
       }
     } catch (e) {
-      print('Error fetching user details: $e'); // Debug log
+      print('Error fetching user details: $e');
       return {};
     }
   }
 
   Widget _buildStatusRadio(
       String orderId, String currentStatus, String status) {
+    // Determine the background color based on the status
+    Color getStatusColor(String status) {
+      switch (status) {
+        case 'Awaiting Payment':
+          return const Color.fromARGB(255, 28, 164, 233);
+        case 'On The Way':
+          return Colors.orange;
+        case 'Delivered':
+          return Colors.green;
+        default:
+          return Colors.grey[200]!;
+      }
+    }
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
-        color: currentStatus == status ? Colors.orange : Colors.grey[200],
+        color:
+            currentStatus == status ? getStatusColor(status) : Colors.grey[200],
         border: Border.all(
-          color: currentStatus == status ? Colors.orange : Colors.grey[400]!,
+          color: currentStatus == status
+              ? getStatusColor(status)
+              : Colors.grey[400]!,
           width: 1.5,
         ),
       ),
@@ -82,6 +97,10 @@ class _OrderApprovePageState extends State<OrderApprovePage> {
           onChanged: (value) {
             if (value != null) {
               _updateOrderStatus(orderId, value);
+              setState(() {
+                // This will update the UI and reflect the color change
+                currentStatus = value;
+              });
             }
           },
         ),
@@ -131,17 +150,16 @@ class _OrderApprovePageState extends State<OrderApprovePage> {
               String currentStatus = order['status'] ?? 'Awaiting Payment';
               String userEmail = order['userEmail'] ?? 'Unknown';
               String pizzaName = order['pizzaName'] ?? 'Unknown';
+              String selectedSize = order['selectedSize'] ?? 'Unknown';
+              double price = order['price'] ?? 0.0;
+              int quantity = order['quantity'] ?? 1;
+              double totalPrice = price * quantity;
 
               return FutureBuilder<Map<String, dynamic>>(
                 future: _getUserDetails(userEmail),
                 builder: (context, userSnapshot) {
-                  // if (userSnapshot.connectionState == ConnectionState.waiting) {
-                  //   return Center(child: CircularProgressIndicator());
-                  // }
-
                   if (userSnapshot.hasError) {
-                    print(
-                        'Error fetching user details: ${userSnapshot.error}'); // Debug log
+                    print('Error fetching user details: ${userSnapshot.error}');
                     return Center(child: Text('Error fetching user details'));
                   }
 
@@ -177,6 +195,11 @@ class _OrderApprovePageState extends State<OrderApprovePage> {
                           ),
                           const SizedBox(height: 8),
                           Text(
+                            "Selected Size: $selectedSize",
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
                             "Email: $userEmail",
                             style: const TextStyle(fontSize: 16),
                           ),
@@ -192,8 +215,21 @@ class _OrderApprovePageState extends State<OrderApprovePage> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            "Total Price: \$${order['totalPrice']}",
+                            "Price: \$${price.toStringAsFixed(2)}",
                             style: const TextStyle(fontSize: 16),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            "Quantity: $quantity",
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            "Total Price: \$${price.toStringAsFixed(2)} * $quantity = \$${totalPrice.toStringAsFixed(2)}",
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           const SizedBox(height: 8),
                           Text(
@@ -216,7 +252,7 @@ class _OrderApprovePageState extends State<OrderApprovePage> {
                           _buildStatusRadio(
                               orderId, currentStatus, 'Awaiting Payment'),
                           _buildStatusRadio(
-                              orderId, currentStatus, 'On the Way'),
+                              orderId, currentStatus, 'On The Way'),
                           _buildStatusRadio(
                               orderId, currentStatus, 'Delivered'),
                         ],

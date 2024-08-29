@@ -31,13 +31,30 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
 
   Widget _buildStatusRadio(
       String orderId, String currentStatus, String status) {
+    // Determine the background color based on the status
+    Color getStatusColor(String status) {
+      switch (status) {
+        case 'Awaiting Payment':
+          return const Color.fromARGB(255, 28, 164, 233);
+        case 'On the Way':
+          return Colors.orange;
+        case 'Delivered':
+          return Colors.green;
+        default:
+          return Colors.grey[200]!;
+      }
+    }
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
-        color: currentStatus == status ? Colors.orange : Colors.grey[200],
+        color:
+            currentStatus == status ? getStatusColor(status) : Colors.grey[200],
         border: Border.all(
-          color: currentStatus == status ? Colors.orange : Colors.grey[400]!,
+          color: currentStatus == status
+              ? getStatusColor(status)
+              : Colors.grey[400]!,
           width: 1.5,
         ),
       ),
@@ -95,6 +112,11 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
               var order = orders[index].data() as Map<String, dynamic>;
               String orderId = orders[index].id;
               String currentStatus = order['status'] ?? 'Awaiting Payment';
+              String pizzaName = order['pizzaName'] ?? 'Unknown Pizza';
+              double price = order['price'] ?? 0.0;
+              int quantity = order['quantity'] ?? 1;
+              String selectedSize = order['selectedSize'] ?? 'Unknown Size';
+              double totalPrice = price * quantity;
 
               return Card(
                 margin:
@@ -113,8 +135,31 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        "Total Price: \$${order['totalPrice']}",
+                        "Pizza Name: $pizzaName",
                         style: const TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        "Selected Size: $selectedSize",
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        "Price: \$$price",
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        "Quantity: $quantity",
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        "Total Price: \$$price * $quantity = \$$totalPrice",
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       Text(

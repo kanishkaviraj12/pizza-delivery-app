@@ -47,8 +47,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
             label: 'View Foods',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Order Edit',
+            icon: Icon(Icons.assessment_outlined),
+            label: 'My Orders',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
