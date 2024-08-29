@@ -46,7 +46,12 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Account Information'),
+        title: const Text(
+          'Account Information',
+          style: TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.deepOrange,
       ),
       body: FutureBuilder<DocumentSnapshot>(
         future: _userData,
@@ -100,8 +105,12 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                       ),
                     ],
                   ),
-                  child:
-                      Text('name: $name', style: const TextStyle(fontSize: 18)),
+                  child: Text(
+                    'name: $name',
+                    style: const TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 10),
                 Container(

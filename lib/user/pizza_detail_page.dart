@@ -73,8 +73,16 @@ class _PizzaDetailsPageState extends State<PizzaDetailsPage>
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.pizzaName),
+        title: Text(
+          widget.pizzaName,
+          style: TextStyle(color: Colors.white),
+        ),
         elevation: 0,
+        centerTitle: true,
+        backgroundColor: Colors.deepOrange,
+        iconTheme: const IconThemeData(
+          color: Colors.white, // Change this to the desired color
+        ),
       ),
       body: Stack(
         children: [

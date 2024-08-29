@@ -31,29 +31,54 @@ class _UserHomePageState extends State<UserHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pages[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        selectedItemColor: Colors.blue, // Color for selected item
-        unselectedItemColor: Colors.grey, // Color for unselected items
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors
+                .black, // Dark background color for the bottom navigation bar
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              // Optional: adds shadow for better visibility
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                spreadRadius: 1,
+                blurRadius: 5,
+                offset: Offset(0, -2), // Shadow position
+              ),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search_rounded),
-            label: 'Search',
+          child: BottomNavigationBar(
+            type: BottomNavigationBarType
+                .fixed, // Ensures background color is respected
+            currentIndex: _selectedIndex,
+            onTap: _onItemTapped,
+            selectedItemColor:
+                Colors.orange[300], // Orange color for selected item
+            unselectedItemColor:
+                Colors.grey[400], // Light grey for unselected items
+            backgroundColor:
+                Colors.transparent, // Transparent to show container color
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.search_rounded),
+                label: 'Search',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.assignment),
+                label: 'My Orders',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                label: 'User',
+              ),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.present_to_all),
-            label: 'My Orders',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'User',
-          ),
-        ],
+        ),
       ),
     );
   }

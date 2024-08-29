@@ -48,7 +48,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4.0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.circular(10.0),
         color:
             currentStatus == status ? getStatusColor(status) : Colors.grey[200],
         border: Border.all(
@@ -87,7 +87,12 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Orders'),
+        title: const Text(
+          'My Orders',
+          style: TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.deepOrange,
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _firestore
@@ -119,6 +124,8 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
               double totalPrice = price * quantity;
 
               return Card(
+                elevation: 5,
+                color: Colors.deepOrange[50],
                 margin:
                     const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                 child: Padding(
@@ -162,21 +169,21 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      Text(
-                        "Current Status: $currentStatus",
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.orange,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      // Text(
+                      //   "Current Status: $currentStatus",
+                      //   style: const TextStyle(
+                      //     fontSize: 16,
+                      //     color: Colors.orange,
+                      //     fontWeight: FontWeight.bold,
+                      //   ),
+                      // ),
                       const SizedBox(height: 16),
-                      Text(
-                        "Update Status:",
-                        style: const TextStyle(
+                      const Text(
+                        "Current Status :",
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black87,
+                          color: Colors.deepOrange,
                         ),
                       ),
                       _buildStatusRadio(

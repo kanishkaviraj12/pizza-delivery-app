@@ -32,17 +32,23 @@ class _SearchFilterScreenState extends State<SearchFilterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Search & Filter'),
+        title: const Text(
+          'Search & Filter',
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
+        backgroundColor: Colors.deepOrange,
       ),
       body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: TextField(
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Search',
-                border: OutlineInputBorder(),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
                 prefixIcon: Icon(Icons.search),
               ),
               onChanged: (value) {
@@ -54,20 +60,30 @@ class _SearchFilterScreenState extends State<SearchFilterScreen> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: DropdownButtonFormField(
-              value: selectedCategory,
-              items: ['All', 'Veg', 'Non-Veg'].map((String category) {
-                return DropdownMenuItem(value: category, child: Text(category));
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  selectedCategory = value.toString();
-                });
-              },
-              decoration: const InputDecoration(
-                labelText: 'Filter by Category',
-                border: InputBorder.none,
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment
+                  .end, // Aligns the Row's content to the right,
+              children: [
+                Container(
+                  width: 150,
+                  child: DropdownButtonFormField(
+                    value: selectedCategory,
+                    items: ['All', 'Veg', 'Non-Veg'].map((String category) {
+                      return DropdownMenuItem(
+                          value: category, child: Text(category));
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedCategory = value.toString();
+                      });
+                    },
+                    decoration: const InputDecoration(
+                      labelText: 'Filter by Category',
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           Expanded(

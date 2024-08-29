@@ -25,8 +25,12 @@ class MenuScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pizza Menu'),
+        title: const Text(
+          'Pizza Menu',
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
+        backgroundColor: Colors.deepOrange,
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: fetchPizzas(),
@@ -50,9 +54,11 @@ class MenuScreen extends StatelessWidget {
               ),
               itemBuilder: (context, index) {
                 return Card(
+                  color: Colors.deepOrange[50],
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+                    borderRadius: BorderRadius.circular(15.0),
                   ),
+                  elevation: 5.0,
                   child: GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -67,76 +73,82 @@ class MenuScreen extends StatelessWidget {
                         ),
                       );
                     },
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Pizza Image
-                          Image.network(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Pizza Image
+                        ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(15.0),
+                            topRight: Radius.circular(15.0),
+                          ),
+                          child: Image.network(
                             pizzas[index]['imageUrl'],
                             height: 120,
                             width: double.infinity,
-                            //fit: BoxFit.cover,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Row with Badges
-                                Row(
-                                  children: [
-                                    if (pizzas[index]['isNonVeg'])
-                                      Badge(
-                                          label: 'Non-Veg', color: Colors.red),
-                                    if (pizzas[index]['isSpicy'])
-                                      Badge(
-                                          label: 'Spicy', color: Colors.orange),
-                                  ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Row with Badges
+                              Row(
+                                children: [
+                                  if (pizzas[index]['isNonVeg'])
+                                    Badge(
+                                        label: 'Non-Veg',
+                                        color: Colors.redAccent),
+                                  if (pizzas[index]['isSpicy'])
+                                    Badge(
+                                        label: 'Spicy',
+                                        color: Colors.orangeAccent),
+                                ],
+                              ),
+                              const SizedBox(height: 4),
+                              // Pizza Name
+                              Text(
+                                pizzas[index]['name'],
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
                                 ),
-                                const SizedBox(height: 4),
-                                // Pizza Name
-                                Text(
-                                  pizzas[index]['name'],
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 4),
+                              // Pizza Description
+                              Text(
+                                pizzas[index]['description'],
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Color.fromARGB(255, 102, 24, 0),
                                 ),
-                                const SizedBox(height: 4),
-                                // Pizza Description
-                                Text(
-                                  pizzas[index]['description'],
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.grey[600],
-                                  ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                const SizedBox(height: 8),
-                                // Row with Price
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      '\$${pizzas[index]['price'].toStringAsFixed(2)}',
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.blue,
-                                      ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 8),
+                              // Row with Price
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '\$${pizzas[index]['price'].toStringAsFixed(2)}',
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.deepOrange,
                                     ),
-                                  ],
-                                ),
-                              ],
-                            ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 );
