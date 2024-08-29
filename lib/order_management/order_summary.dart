@@ -42,16 +42,16 @@ class OrderSummaryPage extends StatelessWidget {
         'userEmail': userEmail, // Save user email
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Order placed successfully!'),
+        const SnackBar(
+          content: Text('Order placed successfully!'),
         ),
       );
       Navigator.pop(context); // Go back to the previous screen
     } catch (e) {
       print('Error saving order: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Error placing order. Please try again.'),
+        const SnackBar(
+          content: Text('Error placing order. Please try again.'),
         ),
       );
     }
@@ -129,7 +129,6 @@ class OrderSummaryPage extends StatelessWidget {
             Center(
               child: ElevatedButton(
                 onPressed: () => _saveOrder(context),
-                child: const Text('Confirm Order'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.lightBlue,
                   padding:
@@ -137,6 +136,7 @@ class OrderSummaryPage extends StatelessWidget {
                   textStyle: const TextStyle(fontSize: 18),
                   foregroundColor: Colors.white,
                 ),
+                child: const Text('Confirm Order'),
               ),
             ),
           ],

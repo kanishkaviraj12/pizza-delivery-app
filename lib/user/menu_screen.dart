@@ -97,11 +97,11 @@ class MenuScreen extends StatelessWidget {
                               Row(
                                 children: [
                                   if (pizzas[index]['isNonVeg'])
-                                    Badge(
+                                    const Badge(
                                         label: 'Non-Veg',
                                         color: Colors.redAccent),
                                   if (pizzas[index]['isSpicy'])
-                                    Badge(
+                                    const Badge(
                                         label: 'Spicy',
                                         color: Colors.orangeAccent),
                                 ],
@@ -166,7 +166,7 @@ class Badge extends StatelessWidget {
   final String label;
   final Color color;
 
-  Badge({required this.label, required this.color});
+  const Badge({super.key, required this.label, required this.color});
 
   @override
   Widget build(BuildContext context) {

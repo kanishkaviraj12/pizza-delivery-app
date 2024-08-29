@@ -49,7 +49,7 @@ class _SearchFilterScreenState extends State<SearchFilterScreen> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(50),
                 ),
-                prefixIcon: Icon(Icons.search),
+                prefixIcon: const Icon(Icons.search),
               ),
               onChanged: (value) {
                 setState(() {
@@ -64,7 +64,7 @@ class _SearchFilterScreenState extends State<SearchFilterScreen> {
               mainAxisAlignment: MainAxisAlignment
                   .end, // Aligns the Row's content to the right,
               children: [
-                Container(
+                SizedBox(
                   width: 150,
                   child: DropdownButtonFormField(
                     value: selectedCategory,
@@ -124,9 +124,11 @@ class _SearchFilterScreenState extends State<SearchFilterScreen> {
                               Row(
                                 children: [
                                   if (pizzas[index]['isNonVeg'])
-                                    Badge(label: 'Non-Veg', color: Colors.red),
+                                    const Badge(
+                                        label: 'Non-Veg', color: Colors.red),
                                   if (pizzas[index]['isSpicy'])
-                                    Badge(label: 'Spicy', color: Colors.orange),
+                                    const Badge(
+                                        label: 'Spicy', color: Colors.orange),
                                 ],
                               ),
                               const SizedBox(height: 4),
@@ -176,7 +178,7 @@ class Badge extends StatelessWidget {
   final String label;
   final Color color;
 
-  Badge({required this.label, required this.color});
+  const Badge({super.key, required this.label, required this.color});
 
   @override
   Widget build(BuildContext context) {

@@ -75,7 +75,7 @@ class _PizzaDetailsPageState extends State<PizzaDetailsPage>
       appBar: AppBar(
         title: Text(
           widget.pizzaName,
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         ),
         elevation: 0,
         centerTitle: true,
@@ -173,7 +173,7 @@ class _PizzaDetailsPageState extends State<PizzaDetailsPage>
                       color: Colors.black87,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -244,7 +244,7 @@ class _PizzaDetailsPageState extends State<PizzaDetailsPage>
                               ),
                             ],
                           ),
-                          Spacer(),
+                          const Spacer(),
                           // Price
                           Text(
                             'Price: \$${(widget.price * _quantity).toStringAsFixed(2)}',
@@ -281,13 +281,13 @@ class _PizzaDetailsPageState extends State<PizzaDetailsPage>
                           ),
                         );
                       },
-                      child: Text('Buy Now'),
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.lightBlue,
                           padding: const EdgeInsets.symmetric(
                               horizontal: 100, vertical: 15),
                           textStyle: const TextStyle(fontSize: 18),
                           foregroundColor: Colors.white),
+                      child: const Text('Buy Now'),
                     ),
                   ),
                 ],

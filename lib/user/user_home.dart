@@ -16,9 +16,9 @@ class _UserHomePageState extends State<UserHomePage> {
 
   final List<Widget> _pages = [
     MenuScreen(),
-    SearchFilterScreen(),
+    const SearchFilterScreen(),
     OrderHistoryPage(),
-    AccountInfoPage(),
+    const AccountInfoPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -44,7 +44,7 @@ class _UserHomePageState extends State<UserHomePage> {
                 color: Colors.black.withOpacity(0.2),
                 spreadRadius: 1,
                 blurRadius: 5,
-                offset: Offset(0, -2), // Shadow position
+                offset: const Offset(0, -2), // Shadow position
               ),
             ],
           ),

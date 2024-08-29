@@ -71,7 +71,7 @@ class _UpdatePizzaPageState extends State<UpdatePizzaPage> {
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Pizza updated successfully')),
+      const SnackBar(content: Text('Pizza updated successfully')),
     );
 
     Navigator.pop(context); // Go back to the pizza list after updating
@@ -84,7 +84,7 @@ class _UpdatePizzaPageState extends State<UpdatePizzaPage> {
         .delete();
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Pizza deleted successfully')),
+      const SnackBar(content: Text('Pizza deleted successfully')),
     );
 
     Navigator.pop(context); // Go back to the pizza list after deletion
@@ -104,72 +104,96 @@ class _UpdatePizzaPageState extends State<UpdatePizzaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Edit Pizza')),
+      appBar: AppBar(
+        title: const Text(
+          'Edit Pizza',
+          style: TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.deepOrange,
+        iconTheme: const IconThemeData(
+          color: Colors.white, // Change this to the desired color
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
             TextField(
               controller: _nameController,
-              decoration: InputDecoration(labelText: 'Pizza Name'),
+              decoration: const InputDecoration(labelText: 'Pizza Name'),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             TextField(
               controller: _descriptionController,
-              decoration: InputDecoration(labelText: 'Description'),
+              decoration: const InputDecoration(labelText: 'Description'),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             TextField(
               controller: _badgeController,
-              decoration: InputDecoration(labelText: 'Badge'),
+              decoration: const InputDecoration(labelText: 'Badge'),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             TextField(
               controller: _priceController,
-              decoration: InputDecoration(labelText: 'Price'),
+              decoration: const InputDecoration(labelText: 'Price'),
               keyboardType: TextInputType.number,
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             _selectedImage == null && _imageUrl != null
-                ? Image.network(_imageUrl!, height: 200, fit: BoxFit.cover)
+                ? Image.network(
+                    _imageUrl!,
+                    height: 200,
+                  )
                 : _selectedImage != null
-                    ? Image.file(_selectedImage!,
-                        height: 200, fit: BoxFit.cover)
+                    ? Image.file(
+                        _selectedImage!,
+                        height: 200,
+                      )
                     : Container(height: 200, color: Colors.grey[200]),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _pickImage,
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.lightGreen,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 75, vertical: 15),
-                  textStyle: const TextStyle(fontSize: 18),
-                  foregroundColor: Colors.white),
-              child: Text('Pick Image'),
+            const SizedBox(height: 16),
+            SizedBox(
+              height: 50,
+              child: ElevatedButton(
+                onPressed: _pickImage,
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.lightGreen,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 75, vertical: 10),
+                    textStyle: const TextStyle(fontSize: 18),
+                    foregroundColor: Colors.white),
+                child: const Text('Pick Image'),
+              ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ElevatedButton(
-                  onPressed: _updatePizza,
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.lightBlue,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 75, vertical: 15),
-                      textStyle: const TextStyle(fontSize: 18),
-                      foregroundColor: Colors.white),
-                  child: Text('Update'),
+                SizedBox(
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: _updatePizza,
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.lightBlue,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 75, vertical: 10),
+                        textStyle: const TextStyle(fontSize: 18),
+                        foregroundColor: Colors.white),
+                    child: const Text('Update'),
+                  ),
                 ),
-                ElevatedButton(
-                  onPressed: _deletePizza,
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 50, vertical: 15),
-                      textStyle: const TextStyle(fontSize: 18),
-                      foregroundColor: Colors.white),
-                  child: Text('Delete'),
+                SizedBox(
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: _deletePizza,
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 50, vertical: 10),
+                        textStyle: const TextStyle(fontSize: 18),
+                        foregroundColor: Colors.white),
+                    child: const Text('Delete'),
+                  ),
                 ),
               ],
             ),

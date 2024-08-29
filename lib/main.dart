@@ -1,13 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:pizza_delivery_app/admin/add_pizza.dart';
-import 'package:pizza_delivery_app/admin/admin_home.dart';
 import 'package:pizza_delivery_app/firebase_options.dart';
-import 'package:pizza_delivery_app/login.dart';
-import 'package:pizza_delivery_app/register.dart';
-import 'package:pizza_delivery_app/user/menu_screen.dart';
-import 'package:pizza_delivery_app/user/pizza_detail_page.dart';
-import 'package:pizza_delivery_app/user/user_home.dart';
+import 'package:pizza_delivery_app/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,10 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.orange,
       ),
-      home: //dminHomePage(),
-          //UserHomePage(),
-          //RegisterPage(),
-          LoginPage(),
+      home: const SplashScreen(),
     );
   }
 }

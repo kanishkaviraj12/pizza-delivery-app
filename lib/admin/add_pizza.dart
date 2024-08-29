@@ -79,7 +79,12 @@ class _AddPizzaPageState extends State<AddPizzaPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Pizza'),
+        title: const Text(
+          'Add Pizza',
+          style: TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.deepOrange,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -135,20 +140,42 @@ class _AddPizzaPageState extends State<AddPizzaPage> {
               ),
               const SizedBox(height: 20),
               _imageFile != null
-                  ? Image.file(_imageFile!,
-                      height: 200, width: double.infinity, fit: BoxFit.cover)
+                  ? Image.file(
+                      _imageFile!,
+                      height: 200,
+                      width: double.infinity,
+                    )
                   : Container(
                       height: 200,
                       color: Colors.grey[200],
                       child: const Icon(Icons.image, size: 100)),
-              ElevatedButton(
-                onPressed: pickImage,
-                child: const Text('Pick Image'),
+              const SizedBox(height: 20),
+              SizedBox(
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: pickImage,
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.lightBlue,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 75, vertical: 10),
+                      textStyle: const TextStyle(fontSize: 17),
+                      foregroundColor: Colors.white),
+                  child: const Text('Pick Image'),
+                ),
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: submitPizzaData,
-                child: const Text('Add Pizza'),
+              SizedBox(
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: submitPizzaData,
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.lightGreen,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 75, vertical: 10),
+                      textStyle: const TextStyle(fontSize: 17),
+                      foregroundColor: Colors.white),
+                  child: const Text('Add Pizza'),
+                ),
               ),
             ],
           ),

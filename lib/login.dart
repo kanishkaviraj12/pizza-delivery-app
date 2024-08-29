@@ -53,12 +53,12 @@ class _LoginPageState extends State<LoginPage> {
           if (userType == 'admin') {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => AdminHomePage()),
+              MaterialPageRoute(builder: (context) => const AdminHomePage()),
             );
           } else {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => UserHomePage()),
+              MaterialPageRoute(builder: (context) => const UserHomePage()),
             );
           }
 
@@ -129,8 +129,8 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
-      ),
+          //title: const Text('Login'),
+          ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -269,7 +269,7 @@ class _LoginPageState extends State<LoginPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => RegisterPage()),
+                              builder: (context) => const RegisterPage()),
                         );
                       },
                       child: const Text('Don\'t have an account? Register'),

@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class OrderHistoryPage extends StatefulWidget {
+  const OrderHistoryPage({super.key});
+
   @override
   _OrderHistoryPageState createState() => _OrderHistoryPageState();
 }
@@ -36,7 +38,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
       switch (status) {
         case 'Awaiting Payment':
           return const Color.fromARGB(255, 28, 164, 233);
-        case 'On the Way':
+        case 'On The Way':
           return Colors.orange;
         case 'Delivered':
           return Colors.green;
@@ -78,7 +80,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
   @override
   Widget build(BuildContext context) {
     if (currentUser == null) {
-      return Scaffold(
+      return const Scaffold(
         body: Center(
           child: Text("No user logged in"),
         ),
@@ -101,7 +103,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
@@ -188,7 +190,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
                       ),
                       _buildStatusRadio(
                           orderId, currentStatus, 'Awaiting Payment'),
-                      _buildStatusRadio(orderId, currentStatus, 'On the Way'),
+                      _buildStatusRadio(orderId, currentStatus, 'On The Way'),
                       _buildStatusRadio(orderId, currentStatus, 'Delivered'),
                     ],
                   ),

@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class OrderApprovePage extends StatefulWidget {
+  const OrderApprovePage({super.key});
+
   @override
   _OrderApprovePageState createState() => _OrderApprovePageState();
 }
@@ -111,7 +113,7 @@ class _OrderApprovePageState extends State<OrderApprovePage> {
   @override
   Widget build(BuildContext context) {
     if (currentUser == null) {
-      return Scaffold(
+      return const Scaffold(
         body: Center(
           child: Text("No user logged in"),
         ),
@@ -122,7 +124,7 @@ class _OrderApprovePageState extends State<OrderApprovePage> {
         'admin@gmail.com'; // Replace with your admin check logic
 
     if (!isAdmin) {
-      return Scaffold(
+      return const Scaffold(
         body: Center(
           child: Text("Access denied. Admins only."),
         ),
@@ -131,13 +133,18 @@ class _OrderApprovePageState extends State<OrderApprovePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Order Management'),
+        title: const Text(
+          'Order Management',
+          style: TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.deepOrange,
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _firestore.collection('orders').snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text("No orders found"));
+            return const Center(child: Text("No orders found"));
           }
 
           final orders = snapshot.data!.docs;
@@ -160,7 +167,8 @@ class _OrderApprovePageState extends State<OrderApprovePage> {
                 builder: (context, userSnapshot) {
                   if (userSnapshot.hasError) {
                     print('Error fetching user details: ${userSnapshot.error}');
-                    return Center(child: Text('Error fetching user details'));
+                    return const Center(
+                        child: Text('Error fetching user details'));
                   }
 
                   var userDetails = userSnapshot.data ?? {};
@@ -169,6 +177,8 @@ class _OrderApprovePageState extends State<OrderApprovePage> {
                   String mobileNumber = userDetails['mobile'] ?? 'Unknown';
 
                   return Card(
+                    elevation: 5,
+                    color: Colors.deepOrange[50],
                     margin: const EdgeInsets.symmetric(
                         vertical: 8.0, horizontal: 16.0),
                     child: Padding(
@@ -232,21 +242,13 @@ class _OrderApprovePageState extends State<OrderApprovePage> {
                             ),
                           ),
                           const SizedBox(height: 8),
-                          Text(
-                            "Current Status: $currentStatus",
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Colors.orange,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
                           const SizedBox(height: 16),
-                          Text(
+                          const Text(
                             "Update Status:",
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black87,
+                              color: Colors.deepOrange,
                             ),
                           ),
                           _buildStatusRadio(
