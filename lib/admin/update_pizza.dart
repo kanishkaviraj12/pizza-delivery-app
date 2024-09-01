@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
 
+// Stateful widget for updating pizza details
 class UpdatePizzaPage extends StatefulWidget {
   final String pizzaId;
 
@@ -14,22 +15,24 @@ class UpdatePizzaPage extends StatefulWidget {
 }
 
 class _UpdatePizzaPageState extends State<UpdatePizzaPage> {
+  // Controllers to handle the text input fields
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _badgeController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
 
-  File? _selectedImage;
-  String? _imageUrl;
+  File? _selectedImage; // File to store the selected image
+  String? _imageUrl; // URL of the existing pizza image
 
-  final ImagePicker _picker = ImagePicker();
+  final ImagePicker _picker = ImagePicker(); // Image picker instance
 
   @override
   void initState() {
     super.initState();
-    _loadPizzaData();
+    _loadPizzaData(); // Load pizza data when the page is initialized
   }
 
+  // Load the pizza data from Firestore and populate the text fields
   Future<void> _loadPizzaData() async {
     DocumentSnapshot doc = await FirebaseFirestore.instance
         .collection('pizzas')
@@ -39,26 +42,31 @@ class _UpdatePizzaPageState extends State<UpdatePizzaPage> {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
     setState(() {
-      _nameController.text = data['name'] ?? '';
-      _descriptionController.text = data['description'] ?? '';
-      _badgeController.text = data['badge'] ?? '';
-      _priceController.text = data['price'].toString();
-      _imageUrl = data['imageUrl'] ?? '';
+      _nameController.text = data['name'] ?? ''; // Set name
+      _descriptionController.text =
+          data['description'] ?? ''; // Set description
+      _badgeController.text = data['badge'] ?? ''; // Set badge
+      _priceController.text = data['price'].toString(); // Set price
+      _imageUrl = data['imageUrl'] ?? ''; // Set image URL
     });
   }
 
+  // Update the pizza details in Firestore
   Future<void> _updatePizza() async {
-    String imageUrl = _imageUrl ?? '';
+    String imageUrl =
+        _imageUrl ?? ''; // Use existing image URL if no new image is selected
 
+    // If a new image is selected, upload it to Firebase Storage
     if (_selectedImage != null) {
       final storageRef = FirebaseStorage.instance
           .ref()
           .child('pizza_images/${widget.pizzaId}.jpg');
 
-      await storageRef.putFile(_selectedImage!);
-      imageUrl = await storageRef.getDownloadURL();
+      await storageRef.putFile(_selectedImage!); // Upload the file
+      imageUrl = await storageRef.getDownloadURL(); // Get the download URL
     }
 
+    // Update the Firestore document with new data
     await FirebaseFirestore.instance
         .collection('pizzas')
         .doc(widget.pizzaId)
@@ -66,10 +74,11 @@ class _UpdatePizzaPageState extends State<UpdatePizzaPage> {
       'name': _nameController.text,
       'description': _descriptionController.text,
       'badge': _badgeController.text,
-      'price': double.parse(_priceController.text),
+      'price': double.parse(_priceController.text), // Convert price to double
       'imageUrl': imageUrl,
     });
 
+    // Show a success message
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Pizza updated successfully')),
     );
@@ -77,12 +86,14 @@ class _UpdatePizzaPageState extends State<UpdatePizzaPage> {
     Navigator.pop(context); // Go back to the pizza list after updating
   }
 
+  // Delete the pizza from Firestore
   Future<void> _deletePizza() async {
     await FirebaseFirestore.instance
         .collection('pizzas')
         .doc(widget.pizzaId)
         .delete();
 
+    // Show a success message
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Pizza deleted successfully')),
     );
@@ -90,12 +101,13 @@ class _UpdatePizzaPageState extends State<UpdatePizzaPage> {
     Navigator.pop(context); // Go back to the pizza list after deletion
   }
 
+  // Pick an image from the gallery
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       setState(() {
-        _selectedImage = File(pickedFile.path);
+        _selectedImage = File(pickedFile.path); // Set the selected image file
         _imageUrl = null; // Clear existing URL if a new image is selected
       });
     }
@@ -119,27 +131,32 @@ class _UpdatePizzaPageState extends State<UpdatePizzaPage> {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
+            // Text field for pizza name
             TextField(
               controller: _nameController,
               decoration: const InputDecoration(labelText: 'Pizza Name'),
             ),
             const SizedBox(height: 8),
+            // Text field for pizza description
             TextField(
               controller: _descriptionController,
               decoration: const InputDecoration(labelText: 'Description'),
             ),
             const SizedBox(height: 8),
+            // Text field for pizza badge
             TextField(
               controller: _badgeController,
               decoration: const InputDecoration(labelText: 'Badge'),
             ),
             const SizedBox(height: 8),
+            // Text field for pizza price
             TextField(
               controller: _priceController,
               decoration: const InputDecoration(labelText: 'Price'),
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.number, // Input type as number
             ),
             const SizedBox(height: 8),
+            // Display the selected image or existing image from URL
             _selectedImage == null && _imageUrl != null
                 ? Image.network(
                     _imageUrl!,
@@ -152,6 +169,7 @@ class _UpdatePizzaPageState extends State<UpdatePizzaPage> {
                       )
                     : Container(height: 200, color: Colors.grey[200]),
             const SizedBox(height: 16),
+            // Button to pick an image
             SizedBox(
               height: 50,
               child: ElevatedButton(
@@ -166,13 +184,14 @@ class _UpdatePizzaPageState extends State<UpdatePizzaPage> {
               ),
             ),
             const SizedBox(height: 16),
+            // Row containing Update and Delete buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: _updatePizza,
+                    onPressed: _updatePizza, // Call update pizza function
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.lightBlue,
                         padding: const EdgeInsets.symmetric(
@@ -185,7 +204,7 @@ class _UpdatePizzaPageState extends State<UpdatePizzaPage> {
                 SizedBox(
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: _deletePizza,
+                    onPressed: _deletePizza, // Call delete pizza function
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red,
                         padding: const EdgeInsets.symmetric(

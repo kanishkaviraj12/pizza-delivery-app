@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart'; // Import Firebase Auth
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pizza_delivery_app/order_management/order_summary.dart';
 
+// StatefulWidget for displaying pizza details
 class PizzaDetailsPage extends StatefulWidget {
   final String pizzaName;
   final String description;
   final String imageUrl;
   final double price;
 
+  // Constructor with required parameters
   const PizzaDetailsPage({
     super.key,
     required this.pizzaName,
@@ -22,28 +24,30 @@ class PizzaDetailsPage extends StatefulWidget {
 
 class _PizzaDetailsPageState extends State<PizzaDetailsPage>
     with SingleTickerProviderStateMixin {
-  int _quantity = 1;
-  String _selectedSize = 'M'; // Default size
+  int _quantity = 1; // Default quantity
+  String _selectedSize = 'M'; // Default pizza size
 
-  // Define size constants for pizza image
+  // Define size constants for the pizza image
   final Map<String, double> _sizeMap = {
     'S': 200.0,
     'M': 250.0,
     'L': 300.0,
   };
 
-  late AnimationController _animationController;
-  late Animation<double> _scaleAnimation;
-  late Animation<double> _rotationAnimation;
+  late AnimationController _animationController; // Controller for animations
+  late Animation<double> _scaleAnimation; // Animation for scaling effect
+  late Animation<double> _rotationAnimation; // Animation for rotation effect
 
   @override
   void initState() {
     super.initState();
+    // Initialize AnimationController
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 600),
       vsync: this,
     );
 
+    // Initialize scale animation
     _scaleAnimation = Tween<double>(begin: 1.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _animationController,
@@ -51,6 +55,7 @@ class _PizzaDetailsPageState extends State<PizzaDetailsPage>
       ),
     );
 
+    // Initialize rotation animation
     _rotationAnimation = Tween<double>(begin: 0.0, end: 0.0).animate(
       CurvedAnimation(
         parent: _animationController,
@@ -58,48 +63,50 @@ class _PizzaDetailsPageState extends State<PizzaDetailsPage>
       ),
     );
 
-    _animationController.forward(); // Initial animation
+    _animationController.forward(); // Start the animation
   }
 
   @override
   void dispose() {
-    _animationController.dispose();
+    _animationController.dispose(); // Dispose of animation controller
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    // Get current user's email from Firebase Auth
     final String? userEmail = FirebaseAuth.instance.currentUser?.email;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.pizzaName,
+          widget.pizzaName, // Title of the AppBar
           style: const TextStyle(color: Colors.white),
         ),
         elevation: 0,
         centerTitle: true,
-        backgroundColor: Colors.deepOrange,
+        backgroundColor: Colors.deepOrange, // Background color of the AppBar
         iconTheme: const IconThemeData(
-          color: Colors.white, // Change this to the desired color
+          color: Colors.white, // Color of icons in the AppBar
         ),
       ),
       body: Stack(
         children: [
-          // Full-circle Background aligned to the top
+          // Full-circle background aligned to the top
           Positioned(
-            top: -150, // Adjust this value to control vertical positioning
-            left: -50, // Adjust this value to control horizontal positioning
+            top: -150, // Adjust vertical position
+            left: -50, // Adjust horizontal position
             child: Container(
               width: 500,
               height: 500,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.orange.withOpacity(0.2),
+                color: Colors.orange
+                    .withOpacity(0.2), // Background color with opacity
               ),
             ),
           ),
-          // Use RotationTransition and ScaleTransition to animate image
+          // Pizza image with rotation and scaling animations
           Positioned(
             top: 16, // Position from top
             left: MediaQuery.of(context).size.width / 2 -
@@ -118,14 +125,13 @@ class _PizzaDetailsPageState extends State<PizzaDetailsPage>
                         color: Colors.black.withOpacity(0.1),
                         spreadRadius: 3,
                         blurRadius: 7,
-                        offset:
-                            const Offset(0, 3), // changes position of shadow
+                        offset: const Offset(0, 3), // Shadow position
                       ),
                     ],
                   ),
                   child: ClipOval(
                     child: Image.network(
-                      widget.imageUrl,
+                      widget.imageUrl, // Display pizza image
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -133,7 +139,7 @@ class _PizzaDetailsPageState extends State<PizzaDetailsPage>
               ),
             ),
           ),
-          // Align the rest of the content to the bottom
+          // Content aligned to the bottom
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
@@ -141,7 +147,7 @@ class _PizzaDetailsPageState extends State<PizzaDetailsPage>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize:
-                    MainAxisSize.min, // Ensures Column takes only needed space
+                    MainAxisSize.min, // Column takes only needed space
                 children: [
                   // Pizza Name
                   Text(
@@ -245,7 +251,7 @@ class _PizzaDetailsPageState extends State<PizzaDetailsPage>
                             ],
                           ),
                           const Spacer(),
-                          // Price
+                          // Price Display
                           Text(
                             'Price: \$${(widget.price * _quantity).toStringAsFixed(2)}',
                             style: const TextStyle(
@@ -263,8 +269,8 @@ class _PizzaDetailsPageState extends State<PizzaDetailsPage>
                   // Buy Button
                   Center(
                     child: ElevatedButton(
-                      // Replace the onPressed method of the ElevatedButton
                       onPressed: () {
+                        // Navigate to OrderSummaryPage with pizza details and user email
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -275,14 +281,14 @@ class _PizzaDetailsPageState extends State<PizzaDetailsPage>
                               price: widget.price,
                               quantity: _quantity,
                               selectedSize: _selectedSize,
-                              userEmail:
-                                  userEmail ?? '', // Pass the user's email
+                              userEmail: userEmail ?? '', // Pass user's email
                             ),
                           ),
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.lightBlue,
+                          backgroundColor:
+                              Colors.lightBlue, // Button background color
                           padding: const EdgeInsets.symmetric(
                               horizontal: 100, vertical: 15),
                           textStyle: const TextStyle(fontSize: 18),
@@ -299,13 +305,14 @@ class _PizzaDetailsPageState extends State<PizzaDetailsPage>
     );
   }
 
+  // Method to build size option buttons
   Widget _buildSizeOption(String size) {
     return GestureDetector(
       onTap: () {
         setState(() {
-          _selectedSize = size;
+          _selectedSize = size; // Update selected size
 
-          // Update the animations
+          // Update the scale and rotation animations
           _scaleAnimation = Tween<double>(
             begin: _scaleAnimation.value,
             end: _sizeMap[size]! / _sizeMap[_selectedSize]!,
@@ -318,7 +325,7 @@ class _PizzaDetailsPageState extends State<PizzaDetailsPage>
 
           _rotationAnimation = Tween<double>(
             begin: _rotationAnimation.value,
-            end: _rotationAnimation.value + 0.06, // Rotates 180 degrees
+            end: _rotationAnimation.value + 0.06, // Rotate slightly
           ).animate(
             CurvedAnimation(
               parent: _animationController,
@@ -334,7 +341,9 @@ class _PizzaDetailsPageState extends State<PizzaDetailsPage>
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8.0),
-          color: _selectedSize == size ? Colors.orange : Colors.grey[200],
+          color: _selectedSize == size
+              ? Colors.orange
+              : Colors.grey[200], // Highlight selected size
         ),
         child: Text(
           size,

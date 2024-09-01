@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:pizza_delivery_app/login.dart';
 
+// Define the SplashScreen widget
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -9,8 +10,10 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
+// Define the state for the SplashScreen
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
+  // Declare animation controllers and animations
   late AnimationController _controller;
   late Animation<double> _animation;
   late Animation<double> _textAnimation;
@@ -20,18 +23,22 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
 
+    // Initialize the animation controller with a 2-second duration
     _controller = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
     );
 
+    // Define the main animation for the splash screen (fade in and out)
     _animation = CurvedAnimation(
       parent: _controller,
       curve: Curves.easeInOut,
     )..addListener(() {
+        // Trigger a rebuild whenever the animation updates
         setState(() {});
       });
 
+    // Define the text fade-in animation
     _textAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
@@ -39,6 +46,7 @@ class _SplashScreenState extends State<SplashScreen>
       ),
     );
 
+    // Define the pulse animation for the logo
     _pulseAnimation = Tween<double>(begin: 1.0, end: 1.2).animate(
       CurvedAnimation(
         parent: _controller,
@@ -46,8 +54,10 @@ class _SplashScreenState extends State<SplashScreen>
       ),
     );
 
+    // Start the animation
     _controller.forward();
 
+    // Navigate to the LoginPage after a 5-second delay
     Timer(const Duration(seconds: 5), () {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const LoginPage()),
@@ -57,6 +67,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   void dispose() {
+    // Dispose of the animation controller when not needed
     _controller.dispose();
     super.dispose();
   }
@@ -64,6 +75,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Set up the splash screen layout
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -76,6 +88,7 @@ class _SplashScreenState extends State<SplashScreen>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // Scale and fade in the logo with a pulse effect
               ScaleTransition(
                 scale: _pulseAnimation,
                 child: FadeTransition(
@@ -89,22 +102,14 @@ class _SplashScreenState extends State<SplashScreen>
                 ),
               ),
               const SizedBox(height: 20),
+              // Show a circular progress indicator while loading
               const CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
               ),
               const SizedBox(height: 20),
+              // Fade in the text (if needed, add text or other widgets here)
               FadeTransition(
                 opacity: _textAnimation,
-                // child: Text(
-                //   'Pizza Delivery App',
-                //   style: TextStyle(
-                //     fontSize: 24.0,
-                //     fontWeight: FontWeight.bold,
-                //     color: Colors.white,
-                //     fontFamily:
-                //         'YourCustomFont', // Replace with your custom font
-                //   ),
-                // ),
               ),
             ],
           ),

@@ -16,7 +16,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
 
   final List<Widget> _pages = [
     const AddPizzaPage(),
-    ViewPizzaPage(),
+    const ViewPizzaPage(),
     const OrderApprovePage(),
     const AccountInfoPage(),
   ];

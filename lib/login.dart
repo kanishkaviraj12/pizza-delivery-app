@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,6 +7,7 @@ import 'package:pizza_delivery_app/admin/admin_home.dart';
 import 'package:pizza_delivery_app/register.dart';
 import 'package:pizza_delivery_app/user/user_home.dart';
 
+// Define the LoginPage widget
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -12,20 +15,29 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
+// State class for LoginPage
 class _LoginPageState extends State<LoginPage> {
+  // Controllers for email and password fields
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  // Key to validate the form
   final _formKey = GlobalKey<FormState>();
+
+  // State variables for password visibility and loading indicator
   bool _obscureText = true;
   bool _isLoading = false;
 
+  // Toggle password visibility
   void _togglePasswordVisibility() {
     setState(() {
       _obscureText = !_obscureText;
     });
   }
 
+  // Function to handle login
   Future<void> _login() async {
+    // Validate the form
     if (_formKey.currentState?.validate() ?? false) {
       setState(() {
         _isLoading = true;
@@ -80,6 +92,7 @@ class _LoginPageState extends State<LoginPage> {
         // Log the error code and message for debugging
         print('FirebaseAuthException caught: ${e.code} - ${e.message}');
 
+        // Determine error message based on the error code
         String message;
         switch (e.code) {
           case 'user-not-found':
@@ -129,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          //title: const Text('Login'),
+          // Optionally add a title or other widgets here
           ),
       body: SingleChildScrollView(
         child: Padding(
@@ -137,6 +150,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // Display the app logo
               Image.asset(
                 'assets/pizza_logo.png',
                 height: 300,
@@ -151,6 +165,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               const SizedBox(height: 24),
+              // Form for email and password input
               Form(
                 key: _formKey,
                 child: Column(
@@ -199,6 +214,7 @@ class _LoginPageState extends State<LoginPage> {
                       },
                     ),
                     const SizedBox(height: 16),
+                    // Show loading indicator or login button
                     if (_isLoading)
                       const CircularProgressIndicator()
                     else
@@ -213,6 +229,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: const Text('Login'),
                       ),
                     const SizedBox(height: 16),
+                    // Forgot password button
                     TextButton(
                       onPressed: () async {
                         String email = _emailController.text.trim();
@@ -264,6 +281,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: const Text('Forgot Password?'),
                     ),
                     const SizedBox(height: 1),
+                    // Navigate to registration page
                     TextButton(
                       onPressed: () {
                         Navigator.push(

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pizza_delivery_app/user/pizza_detail_page.dart';
 
+// Main screen for searching and filtering pizzas
 class SearchFilterScreen extends StatefulWidget {
   const SearchFilterScreen({super.key});
 
@@ -10,13 +11,19 @@ class SearchFilterScreen extends StatefulWidget {
 }
 
 class _SearchFilterScreenState extends State<SearchFilterScreen> {
+  // Variables to hold search query and selected category
   String searchQuery = '';
   String selectedCategory = 'All';
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore firestore =
+      FirebaseFirestore.instance; // Firestore instance to fetch data
 
+  // Function to fetch pizza data from Firestore
   Future<List<Map<String, dynamic>>> fetchPizzas() async {
-    QuerySnapshot querySnapshot = await firestore.collection('pizzas').get();
+    QuerySnapshot querySnapshot = await firestore
+        .collection('pizzas')
+        .get(); // Get all documents from 'pizzas' collection
     return querySnapshot.docs.map((doc) {
+      // Convert each document to a map with desired fields
       return {
         'name': doc['name'],
         'price': doc['price'],
@@ -41,6 +48,7 @@ class _SearchFilterScreenState extends State<SearchFilterScreen> {
       ),
       body: Column(
         children: [
+          // Search TextField
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: TextField(
@@ -53,16 +61,16 @@ class _SearchFilterScreenState extends State<SearchFilterScreen> {
               ),
               onChanged: (value) {
                 setState(() {
-                  searchQuery = value;
+                  searchQuery = value; // Update search query on change
                 });
               },
             ),
           ),
+          // Dropdown for filtering by category
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment
-                  .end, // Aligns the Row's content to the right,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 SizedBox(
                   width: 150,
@@ -74,7 +82,8 @@ class _SearchFilterScreenState extends State<SearchFilterScreen> {
                     }).toList(),
                     onChanged: (value) {
                       setState(() {
-                        selectedCategory = value.toString();
+                        selectedCategory =
+                            value.toString(); // Update selected category
                       });
                     },
                     decoration: const InputDecoration(
@@ -86,21 +95,29 @@ class _SearchFilterScreenState extends State<SearchFilterScreen> {
               ],
             ),
           ),
+          // Display list of pizzas based on search and filter criteria
           Expanded(
             child: FutureBuilder<List<Map<String, dynamic>>>(
               future: fetchPizzas(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(
+                      child:
+                          CircularProgressIndicator()); // Show loading indicator while fetching data
                 } else if (snapshot.hasError) {
-                  return const Center(child: Text('Error loading pizzas'));
+                  return const Center(
+                      child: Text(
+                          'Error loading pizzas')); // Show error message if there's an error
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text('No pizzas available'));
+                  return const Center(
+                      child: Text(
+                          'No pizzas available')); // Show message if no data is available
                 } else {
                   final pizzas = snapshot.data!;
                   return ListView.builder(
                     itemCount: pizzas.length,
                     itemBuilder: (context, index) {
+                      // Filter pizzas based on search query and selected category
                       if ((searchQuery.isEmpty ||
                               pizzas[index]['name']
                                   .toLowerCase()
@@ -159,7 +176,7 @@ class _SearchFilterScreenState extends State<SearchFilterScreen> {
                           },
                         );
                       } else {
-                        return Container();
+                        return Container(); // Return an empty container if pizza does not match filter criteria
                       }
                     },
                   );
@@ -173,7 +190,7 @@ class _SearchFilterScreenState extends State<SearchFilterScreen> {
   }
 }
 
-// Badge Widget
+// Badge Widget for displaying labels like 'Spicy' and 'Non-Veg'
 class Badge extends StatelessWidget {
   final String label;
   final Color color;

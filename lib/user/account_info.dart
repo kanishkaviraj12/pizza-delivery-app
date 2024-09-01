@@ -11,8 +11,11 @@ class AccountInfoPage extends StatefulWidget {
 }
 
 class _AccountInfoPageState extends State<AccountInfoPage> {
+  // Initialize FirebaseAuth and Firestore instances
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  // Declare a future to hold user data from Firestore
   late Future<DocumentSnapshot> _userData;
 
   @override
@@ -21,21 +24,25 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
     // Get the current user's ID
     final userId = _auth.currentUser?.uid;
     if (userId != null) {
-      // Fetch user data from Firestore
+      // Fetch user data from Firestore based on the current user's ID
       _userData = _firestore.collection('users').doc(userId).get();
     } else {
-      // Handle case where user is not logged in
+      // If no user is logged in, set a default future
       _userData = Future.value(null);
     }
   }
 
+  // Method to handle user logout
   Future<void> _logout() async {
     try {
-      await _auth.signOut();
+      await _auth.signOut(); // Sign out the user
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const LoginPage()),
+        MaterialPageRoute(
+            builder: (context) =>
+                const LoginPage()), // Navigate to the login page
       );
     } catch (e) {
+      // Show an error message if something goes wrong
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error logging out: $e')),
       );
@@ -47,27 +54,34 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Account Information',
+          'Account Information', // Title of the app bar
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
-        backgroundColor: Colors.deepOrange,
+        backgroundColor: Colors.deepOrange, // App bar background color
       ),
       body: FutureBuilder<DocumentSnapshot>(
-        future: _userData,
+        future: _userData, // The future to build the widget with
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+                child:
+                    CircularProgressIndicator()); // Show a loading spinner while fetching data
           }
 
           if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center(
+                child: Text(
+                    'Error: ${snapshot.error}')); // Show an error message if there's an issue
           }
 
           if (!snapshot.hasData || !snapshot.data!.exists) {
-            return const Center(child: Text('No data found.'));
+            return const Center(
+                child: Text(
+                    'No data found.')); // Show a message if no data is found
           }
 
+          // Extract user data from the snapshot
           final data = snapshot.data!.data() as Map<String, dynamic>;
           final name = data['name'] ?? 'No name';
           final email = data['userEmail'] ?? 'No email';
@@ -83,12 +97,13 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
               children: [
                 Center(
                   child: CircleAvatar(
-                    backgroundImage:
-                        AssetImage('assets/profile_pic/$profileImage'),
-                    radius: 100,
+                    backgroundImage: AssetImage(
+                        'assets/profile_pic/$profileImage'), // Display the user's profile image
+                    radius: 100, // Radius of the avatar
                   ),
                 ),
                 const SizedBox(height: 20),
+                // Display user name
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(16.0),
@@ -100,19 +115,19 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                         color: Colors.grey.withOpacity(0.3),
                         spreadRadius: 2,
                         blurRadius: 5,
-                        offset:
-                            const Offset(0, 3), // changes position of shadow
+                        offset: const Offset(0, 3), // Shadow position
                       ),
                     ],
                   ),
                   child: Text(
-                    'name: $name',
+                    'Name: $name',
                     style: const TextStyle(
                       fontSize: 18,
                     ),
                   ),
                 ),
                 const SizedBox(height: 10),
+                // Display user email
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(16.0),
@@ -124,8 +139,7 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                         color: Colors.grey.withOpacity(0.3),
                         spreadRadius: 2,
                         blurRadius: 5,
-                        offset:
-                            const Offset(0, 3), // changes position of shadow
+                        offset: const Offset(0, 3),
                       ),
                     ],
                   ),
@@ -133,6 +147,7 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                       style: const TextStyle(fontSize: 18)),
                 ),
                 const SizedBox(height: 10),
+                // Display user mobile number
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(16.0),
@@ -152,6 +167,7 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                       style: const TextStyle(fontSize: 18)),
                 ),
                 const SizedBox(height: 10),
+                // Display user address
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(16.0),
@@ -171,11 +187,13 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                       style: const TextStyle(fontSize: 18)),
                 ),
                 const SizedBox(height: 20),
+                // Logout button
                 Center(
                   child: ElevatedButton(
                     onPressed: _logout,
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red, // Background color
+                        backgroundColor:
+                            Colors.red, // Background color of the button
                         padding: const EdgeInsets.symmetric(
                             horizontal: 100, vertical: 15),
                         textStyle: const TextStyle(fontSize: 18),

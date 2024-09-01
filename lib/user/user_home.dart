@@ -17,7 +17,7 @@ class _UserHomePageState extends State<UserHomePage> {
   final List<Widget> _pages = [
     MenuScreen(),
     const SearchFilterScreen(),
-    OrderHistoryPage(),
+    const OrderHistoryPage(),
     const AccountInfoPage(),
   ];
 
