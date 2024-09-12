@@ -158,6 +158,11 @@ class OrderSummaryPage extends StatelessWidget {
                   backgroundColor: Colors.lightBlue, // Set button color
                   padding:
                       const EdgeInsets.symmetric(horizontal: 100, vertical: 15),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                  ),
                   textStyle: const TextStyle(fontSize: 18), // Set text style
                   foregroundColor: Colors.white, // Set text color
                 ),

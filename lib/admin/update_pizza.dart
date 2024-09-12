@@ -171,13 +171,17 @@ class _UpdatePizzaPageState extends State<UpdatePizzaPage> {
             const SizedBox(height: 16),
             // Button to pick an image
             SizedBox(
-              height: 50,
+              height: 45,
               child: ElevatedButton(
                 onPressed: _pickImage,
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.lightGreen,
                     padding: const EdgeInsets.symmetric(
                         horizontal: 75, vertical: 10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(10), // Rounded corners
+                    ),
                     textStyle: const TextStyle(fontSize: 18),
                     foregroundColor: Colors.white),
                 child: const Text('Pick Image'),
@@ -189,26 +193,34 @@ class _UpdatePizzaPageState extends State<UpdatePizzaPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  height: 50,
+                  height: 45,
                   child: ElevatedButton(
                     onPressed: _updatePizza, // Call update pizza function
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.lightBlue,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 75, vertical: 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(10), // Rounded corners
+                        ),
                         textStyle: const TextStyle(fontSize: 18),
                         foregroundColor: Colors.white),
                     child: const Text('Update'),
                   ),
                 ),
                 SizedBox(
-                  height: 50,
+                  height: 45,
                   child: ElevatedButton(
                     onPressed: _deletePizza, // Call delete pizza function
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 50, vertical: 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(10), // Rounded corners
+                        ),
                         textStyle: const TextStyle(fontSize: 18),
                         foregroundColor: Colors.white),
                     child: const Text('Delete'),

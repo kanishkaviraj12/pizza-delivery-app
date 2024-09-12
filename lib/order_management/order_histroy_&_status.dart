@@ -58,38 +58,45 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
     }
 
     // Return a container with a radio button styled based on the status
-    return Container(
-      margin: const EdgeInsets.symmetric(
-          vertical: 4.0), // Vertical margin around the container
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.0), // Rounded corners
-        color: currentStatus == status
-            ? getStatusColor(status)
-            : Colors.grey[200], // Set color based on current status
-        border: Border.all(
+    return SizedBox(
+      child: Container(
+        margin: const EdgeInsets.symmetric(
+          vertical: 4.0,
+        ), // Vertical margin around the container
+
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.0), // Rounded corners
           color: currentStatus == status
               ? getStatusColor(status)
-              : Colors.grey[
-                  400]!, // Border color also depends on the current status
-          width: 1.5,
-        ),
-      ),
-      child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16.0), // Horizontal padding inside the ListTile
-        title: Text(
-          status, // Display the status text
-          style: TextStyle(
+              : Colors.grey[200], // Set color based on current status
+          border: Border.all(
             color: currentStatus == status
-                ? Colors.white
-                : Colors.black87, // Text color depends on the current status
+                ? getStatusColor(status)
+                : Colors.grey[
+                    400]!, // Border color also depends on the current status
+            width: 1.5,
           ),
         ),
-        leading: Radio<String>(
-          value: status, // Value for the radio button
-          groupValue: currentStatus, // Current selected value for the group
-          onChanged:
-              null, // Disable interaction as the status cannot be changed by the user
+        child: ListTile(
+          dense: true,
+          contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16.0), // Horizontal padding inside the ListTile
+
+          title: Text(
+            status, // Display the status text
+            style: TextStyle(
+              fontSize: 15,
+              color: currentStatus == status
+                  ? Colors.white
+                  : Colors.black87, // Text color depends on the current status
+            ),
+          ),
+          leading: Radio<String>(
+            value: status, // Value for the radio button
+            groupValue: currentStatus, // Current selected value for the group
+            onChanged:
+                null, // Disable interaction as the status cannot be changed by the user
+          ),
         ),
       ),
     );

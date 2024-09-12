@@ -127,8 +127,13 @@ class _RegisterPageState extends State<RegisterPage> {
                   onPressed: _submitForm, // Submit form action
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.lightBlue, // Button color
+
                       padding: const EdgeInsets.symmetric(
                           horizontal: 100, vertical: 15), // Button padding
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(10), // Rounded corners
+                      ),
                       textStyle:
                           const TextStyle(fontSize: 18), // Button text style
                       foregroundColor: Colors.white), // Button text color

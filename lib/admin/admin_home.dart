@@ -37,7 +37,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
           decoration: BoxDecoration(
             color: Colors
                 .black, // Dark background color for the bottom navigation bar
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(12),
             boxShadow: [
               // Optional: adds shadow for better visibility
               BoxShadow(

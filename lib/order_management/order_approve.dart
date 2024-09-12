@@ -95,10 +95,12 @@ class _OrderApprovePageState extends State<OrderApprovePage> {
         ),
       ),
       child: ListTile(
+        dense: true,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
         title: Text(
           status,
           style: TextStyle(
+            fontSize: 15,
             color: currentStatus == status ? Colors.white : Colors.black87,
           ),
         ),

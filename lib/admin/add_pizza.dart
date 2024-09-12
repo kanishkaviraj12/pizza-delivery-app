@@ -179,7 +179,7 @@ class _AddPizzaPageState extends State<AddPizzaPage> {
                       child: const Icon(Icons.image, size: 100)),
               const SizedBox(height: 20), // Add vertical spacing.
               SizedBox(
-                height: 50,
+                height: 45,
                 child: ElevatedButton(
                   onPressed:
                       pickImage, // Call the pickImage function when pressed.
@@ -187,6 +187,10 @@ class _AddPizzaPageState extends State<AddPizzaPage> {
                       backgroundColor: Colors.lightBlue,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 75, vertical: 10), // Style the button.
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(10), // Rounded corners
+                      ),
                       textStyle: const TextStyle(fontSize: 17),
                       foregroundColor: Colors.white),
                   child: const Text('Pick Image'),
@@ -194,7 +198,7 @@ class _AddPizzaPageState extends State<AddPizzaPage> {
               ),
               const SizedBox(height: 20), // Add vertical spacing.
               SizedBox(
-                height: 50,
+                height: 45,
                 child: ElevatedButton(
                   onPressed:
                       submitPizzaData, // Call the submitPizzaData function when pressed.
@@ -202,6 +206,10 @@ class _AddPizzaPageState extends State<AddPizzaPage> {
                       backgroundColor: Colors.lightGreen,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 75, vertical: 10), // Style the button.
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(10), // Rounded corners
+                      ),
                       textStyle: const TextStyle(fontSize: 17),
                       foregroundColor: Colors.white),
                   child: const Text('Add Pizza'),

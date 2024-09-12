@@ -173,8 +173,13 @@ class _LoginPageState extends State<LoginPage> {
                     TextFormField(
                       controller: _emailController,
                       decoration: const InputDecoration(
+                        isDense: true, // Reduce height
                         labelText: 'Email',
-                        border: OutlineInputBorder(),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(8),
+                          ),
+                        ),
                       ),
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
@@ -195,8 +200,13 @@ class _LoginPageState extends State<LoginPage> {
                       controller: _passwordController,
                       obscureText: _obscureText,
                       decoration: InputDecoration(
+                        isDense: true, // Reduce height
                         labelText: 'Password',
-                        border: const OutlineInputBorder(),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(8),
+                          ),
+                        ),
                         suffixIcon: IconButton(
                           icon: Icon(
                             _obscureText
@@ -213,7 +223,7 @@ class _LoginPageState extends State<LoginPage> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 30),
                     // Show loading indicator or login button
                     if (_isLoading)
                       const CircularProgressIndicator()
@@ -225,6 +235,10 @@ class _LoginPageState extends State<LoginPage> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 100, vertical: 15),
                             textStyle: const TextStyle(fontSize: 18),
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(10), // Rounded corners
+                            ),
                             foregroundColor: Colors.white),
                         child: const Text('Login'),
                       ),

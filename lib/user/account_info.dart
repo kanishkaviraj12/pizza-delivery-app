@@ -196,6 +196,10 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                             Colors.red, // Background color of the button
                         padding: const EdgeInsets.symmetric(
                             horizontal: 100, vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(10), // Rounded corners
+                        ),
                         textStyle: const TextStyle(fontSize: 18),
                         foregroundColor: Colors.white),
                     child: const Text('Log Out'),

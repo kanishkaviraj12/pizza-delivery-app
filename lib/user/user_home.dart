@@ -37,7 +37,7 @@ class _UserHomePageState extends State<UserHomePage> {
           decoration: BoxDecoration(
             color: Colors
                 .black, // Dark background color for the bottom navigation bar
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(15),
             boxShadow: [
               // Optional: adds shadow for better visibility
               BoxShadow(

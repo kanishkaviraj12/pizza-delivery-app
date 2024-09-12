@@ -53,9 +53,10 @@ class _SearchFilterScreenState extends State<SearchFilterScreen> {
             padding: const EdgeInsets.all(16.0),
             child: TextField(
               decoration: InputDecoration(
+                isDense: true,
                 labelText: 'Search',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(50),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 prefixIcon: const Icon(Icons.search),
               ),

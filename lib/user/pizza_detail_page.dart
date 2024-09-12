@@ -291,6 +291,11 @@ class _PizzaDetailsPageState extends State<PizzaDetailsPage>
                               Colors.lightBlue, // Button background color
                           padding: const EdgeInsets.symmetric(
                               horizontal: 100, vertical: 15),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
                           textStyle: const TextStyle(fontSize: 18),
                           foregroundColor: Colors.white),
                       child: const Text('Buy Now'),
